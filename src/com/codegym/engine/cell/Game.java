@@ -145,7 +145,7 @@ public class Game extends Application implements GameScreen {
                     cell = (Rectangle) children.get(0);
                     cell.setWidth((double) (cellSize - 1));
                     cell.setHeight((double) (cellSize - 1));
-                    cell.setStroke(this.toFXColor(com.javarush.engine.cell.Color.BLACK));
+                    cell.setStroke(this.toFXColor(Color.BLACK));
                 }
 
                 if (this.showCoordinates && children.size() > 2) {
@@ -182,20 +182,20 @@ public class Game extends Application implements GameScreen {
 
     private void createScorePanel() {
         this.scoreText.setFont(Font.font("Verdana", FontWeight.BOLD, 16.0D));
-        this.scoreText.setFill(this.toFXColor(com.javarush.engine.cell.Color.BLACK));
+        this.scoreText.setFill(this.toFXColor(Color.BLACK));
         StackPane scorePane = new StackPane(this.scoreText);
-        scorePane.setBorder(new Border(new BorderStroke(this.toFXColor(com.javarush.engine.cell.Color.BLACK),
+        scorePane.setBorder(new Border(new BorderStroke(this.toFXColor(Color.BLACK),
                 BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         scorePane.setLayoutY((double) (this.height * cellSize + PADDING_TOP + 6));
         int scoreHeight = 20;
         Rectangle rectangle;
         if (this.showGrid) {
             rectangle = new Rectangle((double) ((this.width * cellSize - 1) >> 1), (double) scoreHeight,
-                    this.toFXColor(com.javarush.engine.cell.Color.WHITE));
+                    this.toFXColor(Color.WHITE));
             scorePane.setLayoutX((double)(PADDING_SIDE + (this.width * cellSize - 1) >> 2));
         } else {
             rectangle = new Rectangle((double) (this.width * cellSize >> 1), (double) scoreHeight,
-                    this.toFXColor(com.javarush.engine.cell.Color.WHITE));
+                    this.toFXColor(Color.WHITE));
             scorePane.setLayoutX((double) (124 + (this.width * cellSize >> 2)));
         }
 
@@ -224,7 +224,7 @@ public class Game extends Application implements GameScreen {
         return this.height;
     }
 
-    public void setCellColor(int x, int y, com.javarush.engine.cell.Color color) {
+    public void setCellColor(int x, int y, Color color) {
         if (color != null && color != com.javarush.engine.cell.Color.NONE) {
             ObservableList<Node> children = this.cells[y][x].getChildren();
             if (children.size() > 0 && !Color.valueOf(color.name()).equals(((Rectangle) children.get(0)).getFill())) {
@@ -233,13 +233,13 @@ public class Game extends Application implements GameScreen {
         }
     }
 
-    public com.javarush.engine.cell.Color getCellColor(int x, int y) {
+    public Color getCellColor(int x, int y) {
         ObservableList<Node> children = this.cells[y][x].getChildren();
         if (children.size() > 0) {
             Color color = (Color) ((Rectangle) children.get(0)).getFill();
             return this.fromFXColor(color);
         } else {
-            return com.javarush.engine.cell.Color.NONE;
+            return Color.NONE;
         }
     }
 
@@ -296,7 +296,7 @@ public class Game extends Application implements GameScreen {
         }
     }
 
-    public void setCellTextColor(int x, int y, com.javarush.engine.cell.Color color) {
+    public void setCellTextColor(int x, int y, Color color) {
         ObservableList<Node> children = this.cells[y][x].getChildren();
         if (children.size() > 1) {
             Text text = (Text) children.get(1);
@@ -306,13 +306,13 @@ public class Game extends Application implements GameScreen {
         }
     }
 
-    public com.javarush.engine.cell.Color getCellTextColor(int x, int y) {
+    public Color getCellTextColor(int x, int y) {
         ObservableList<Node> children = this.cells[y][x].getChildren();
         if (children.size() > 1) {
             Text text = (Text) children.get(1);
             return this.fromFXColor((Color) text.getFill());
         } else {
-            return com.javarush.engine.cell.Color.NONE;
+            return Color.NONE;
         }
     }
 
@@ -359,7 +359,7 @@ public class Game extends Application implements GameScreen {
     public void onTurn(int step) {
     }
 
-    private com.javarush.engine.cell.Color fromFXColor(Color color) {
+    private Color fromFXColor(Color color) {
         Field[] fields = Color.class.getFields();
         Map<String, Color> colors = Arrays.stream(fields).filter((field) ->
                 Color.class.equals(field.getType())).collect(Collectors.toMap(Field::getName, (field) -> {
@@ -372,13 +372,13 @@ public class Game extends Application implements GameScreen {
         }));
         Optional<Entry<String, Color>> optionalColorEntry = colors.entrySet().stream().filter((entry) ->
                 color.equals(entry.getValue())).findFirst();
-        com.javarush.engine.cell.Color[] result = new com.javarush.engine.cell.Color[]{com.javarush.engine.cell.Color.NONE};
-        optionalColorEntry.ifPresent((entry) -> result[0] = com.javarush.engine.cell.Color.valueOf(entry.getKey()));
+       Color[] result = new Color[]{Color.NONE};
+        optionalColorEntry.ifPresent((entry) -> result[0] = Color.valueOf(entry.getKey()));
         return result[0];
     }
 
-    private Color toFXColor(com.javarush.engine.cell.Color color) {
-        if (color == com.javarush.engine.cell.Color.NONE) {
+    private Color toFXColor(Color color) {
+        if (color == Color.NONE) {
             return Color.TRANSPARENT;
         } else {
             return color != null ? Color.valueOf(color.name()) : Color.BLACK;
@@ -408,22 +408,22 @@ public class Game extends Application implements GameScreen {
         }
     }
 
-    public void setCellValueEx(int x, int y, com.javarush.engine.cell.Color cellColor, String value) {
+    public void setCellValueEx(int x, int y, Color cellColor, String value) {
         this.setCellValue(x, y, value);
         this.setCellColor(x, y, cellColor);
     }
 
-    public void setCellValueEx(int x, int y, com.javarush.engine.cell.Color cellColor, String value, com.javarush.engine.cell.Color textColor) {
+    public void setCellValueEx(int x, int y, Color cellColor, String value, Color textColor) {
         this.setCellValueEx(x, y, cellColor, value);
         this.setCellTextColor(x, y, textColor);
     }
 
-    public void setCellValueEx(int x, int y, com.javarush.engine.cell.Color cellColor, String value, com.javarush.engine.cell.Color textColor, int textSize) {
+    public void setCellValueEx(int x, int y, Color cellColor, String value, Color textColor, int textSize) {
         this.setCellValueEx(x, y, cellColor, value, textColor);
         this.setCellTextSize(x, y, textSize);
     }
 
-    public void showMessageDialog(com.javarush.engine.cell.Color cellColor, String message, com.javarush.engine.cell.Color textColor, int textSize) {
+    public void showMessageDialog(Color cellColor, String message, Color textColor, int textSize) {
         if (this.dialogContainer == null) {
             this.dialogContainer = new TextFlow();
             this.root.getChildren().add(this.dialogContainer);
@@ -451,7 +451,7 @@ public class Game extends Application implements GameScreen {
         if (this.livesText == null) {
             this.livesText = new Text();
             this.livesText.setFont(Font.font(20.0D));
-            this.livesText.setFill(this.toFXColor(com.javarush.engine.cell.Color.ORANGE));
+            this.livesText.setFill(this.toFXColor(Color.ORANGE));
             this.livesText.setY(160.0D);
             this.livesText.setX(127.0D);
             this.root.getChildren().addAll(this.livesText);
